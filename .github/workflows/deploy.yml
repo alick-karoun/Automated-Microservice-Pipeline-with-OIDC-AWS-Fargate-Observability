@@ -1,0 +1,26 @@
+name: AWS Deployment
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  id-token: write   # Required for requesting the JWT token
+  contents: read    # Required to checkout code
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::489109585245:role/Automated-Microservice-Pipeline-with-OIDC-project
+          aws-region: eu-north-1 # Change to your target region
+
+      - name: Test AWS Access
+        run: |
+          aws sts get-caller-identity
